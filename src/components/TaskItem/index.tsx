@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Task } from "../../types/Task";
 import * as Styles from "./styles";
 
@@ -6,5 +7,16 @@ type TaskItemProps = {
 };
 
 export const TaskItem = ({ task }: TaskItemProps) => {
-  return <Styles.Container>{task.name}</Styles.Container>;
+  const [isChecked, setIsChecked] = useState(task.done);
+
+  return (
+    <Styles.Container>
+      <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={(e) => setIsChecked(e.target.checked)}
+      />
+      <label>{task.name}</label>
+    </Styles.Container>
+  );
 };
