@@ -10,7 +10,7 @@ export const TaskItem = ({ task }: TaskItemProps) => {
   const [isChecked, setIsChecked] = useState(task.done);
 
   return (
-    <Styles.Container>
+    <Styles.Container done={isChecked}>
       <input
         type="checkbox"
         checked={isChecked}
