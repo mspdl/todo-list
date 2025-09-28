@@ -6,11 +6,12 @@ type ContainerProps = {
 
 export const Container = styled.div<ContainerProps>`
   display: flex;
-  background-color: #20212c;
+  background-color: ${(props) => (props.done ? "#333" : "#20212c")};
   padding: 10px;
   border-radius: 10px;
   align-items: center;
   margin-bottom: 10px;
+  cursor: pointer;
 
   input {
     width: 25px;
@@ -19,7 +20,7 @@ export const Container = styled.div<ContainerProps>`
   }
 
   label {
-    color: #ccc;
-    text-decoration: ${(props) => (props.done ? 'line-through' : 'initial')};
+    color: ${(props) => (props.done ? "#777" : "#ccc")};
+    text-decoration: ${(props) => (props.done ? "line-through" : "initial")};
   }
 `;
