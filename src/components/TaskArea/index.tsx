@@ -6,7 +6,7 @@ type TaskItemProps = {
   task: Task;
 };
 
-export const TaskItem = ({ task }: TaskItemProps) => {
+export const TaskArea = ({ task }: TaskItemProps) => {
   const [isChecked, setIsChecked] = useState(task.done);
 
   return (
