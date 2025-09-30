@@ -3,6 +3,7 @@ import * as Styles from "./App.styles";
 import { AddTaskArea } from "./components/AddTaskArea";
 import { TaskArea } from "./components/TaskArea";
 import { TaskListMock } from "./mocks/TaskList.mock";
+import { TaskService } from "./service/TaskService";
 import { Task } from "./types/Task";
 
 const App = () => {
@@ -10,18 +11,9 @@ const App = () => {
 
   const handleAddTask = (taskName: string) => {
     const newList = [...taskList];
-    const newTask = taskCreator(taskName);
+    const newTask = TaskService.addTask(taskName);
     newList.push(newTask);
     setList(newList);
-  };
-
-  const taskCreator = (taskName: string): Task => {
-    return {
-      name: taskName,
-      done: false,
-      created: new Date().toString(),
-      id: Math.random(),
-    };
   };
 
   return (
