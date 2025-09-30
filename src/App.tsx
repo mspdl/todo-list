@@ -16,6 +16,17 @@ const App = () => {
     setList(newList);
   };
 
+  const handleToggleTask = (id: string) => {
+    const newList = taskList.map((task) => {
+      if (task.id === id) {
+        return TaskService.toggleTask(task);
+      }
+      return task;
+    });
+
+    setList(newList);
+  };
+
   return (
     <Styles.Container>
       <Styles.Area>
@@ -25,7 +36,7 @@ const App = () => {
 
         {taskList.map((task, index) => (
           <div key={index}>
-            <TaskArea key={index} task={task} />
+            <TaskArea key={index} task={task} onToggle={handleToggleTask} />
           </div>
         ))}
       </Styles.Area>
