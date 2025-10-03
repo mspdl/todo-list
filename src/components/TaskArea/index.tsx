@@ -4,12 +4,18 @@ import * as Styles from "./styles";
 type TaskItemProps = {
   task: Task;
   onToggle: (taskId: string) => void;
+  onDelete: (taskId: string) => void;
 };
 
-export const TaskArea = ({ task, onToggle }: TaskItemProps) => {
+export const TaskArea = ({ task, onToggle, onDelete }: TaskItemProps) => {
   const handleToggle = () => {
     onToggle(task.id);
   };
+  
+  const handleDelete = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  onDelete(task.id);
+};
 
   return (
     <Styles.Container done={task.done} onClick={handleToggle}>
@@ -19,9 +25,10 @@ export const TaskArea = ({ task, onToggle }: TaskItemProps) => {
         onChange={handleToggle}
         onClick={(e) => e.stopPropagation()}
       />
-      <label>
-        {task.name} - {task.id}
-      </label>
+      <label>{task.name}</label>
+      <span className="delete" onClick={handleDelete}>
+        delete
+      </span>
     </Styles.Container>
   );
 };

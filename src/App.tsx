@@ -27,6 +27,17 @@ const App = () => {
     setList(newList);
   };
 
+  const handleDeleteTask = (id: string) => {
+    const newList = taskList.map((task) => {
+      if (task.id === id) {
+        return TaskService.deleteTask(task);
+      }
+      return task;
+    });
+
+    setList(newList);
+  };
+
   return (
     <Styles.Container>
       <Styles.Area>
@@ -34,11 +45,18 @@ const App = () => {
 
         <AddTaskArea onEnter={handleAddTask} />
 
-        {taskList.map((task, index) => (
-          <div key={index}>
-            <TaskArea key={index} task={task} onToggle={handleToggleTask} />
-          </div>
-        ))}
+        {taskList
+          .filter((task) => !task.deleted)
+          .map((task, index) => (
+            <div key={index}>
+              <TaskArea
+                key={index}
+                task={task}
+                onToggle={handleToggleTask}
+                onDelete={handleDeleteTask}
+              />
+            </div>
+          ))}
       </Styles.Area>
     </Styles.Container>
   );

@@ -9,9 +9,13 @@ export const TaskService = {
       name: newTaskName,
       done: false,
       created: currentDate,
+      deleted: false,
     };
   },
   toggleTask(task: Task): Task {
     return { ...task, done: !task.done, updated: currentDate };
-  }
+  },
+  deleteTask(task: Task): Task {
+    return { ...task, deleted: true, updated: currentDate };
+  },
 };

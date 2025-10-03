@@ -5,6 +5,7 @@ export const TaskListMock: Task[] = [
     name: "Buy Milk",
     done: false,
     created: "2024-06-01T10:00:00Z",
+    deleted: false,
   },
   {
     id: "2",
@@ -12,5 +13,6 @@ export const TaskListMock: Task[] = [
     done: true,
     created: "2024-06-02T12:00:00Z",
     updated: "2024-06-03T14:00:00Z",
+    deleted: false,
   },
 ];

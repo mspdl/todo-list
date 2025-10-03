@@ -23,4 +23,15 @@ export const Container = styled.div<ContainerProps>`
     color: ${(props) => (props.done ? "#777" : "#ccc")};
     text-decoration: ${(props) => (props.done ? "line-through" : "initial")};
   }
+
+  .delete {
+    margin-left: auto;
+
+    &:hover {
+      border-radius: 10px;
+      background-color: #fff;
+      color: #000;
+      padding: 5px;
+    }
+  }
 `;
