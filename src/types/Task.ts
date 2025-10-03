@@ -1,7 +1,8 @@
 export type Task = {
-  id: number;
+  id: string;
   name: string;
   done: boolean;
   created: string;
   updated?: string;
+  deleted: boolean;
 };
