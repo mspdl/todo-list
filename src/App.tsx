@@ -3,7 +3,7 @@ import * as Styles from "./App.styles";
 import { AddTaskArea } from "./components/AddTaskArea";
 import { TaskArea } from "./components/TaskArea";
 import { TaskListMock } from "./mocks/TaskList.mock";
-import { TaskService } from "./service/TaskService";
+import { TaskService } from "./services/TaskService";
 import { Task } from "./types/Task";
 
 const App = () => {
