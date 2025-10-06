@@ -1,42 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Styles from "./App.styles";
 import { AddTaskArea } from "./components/AddTaskArea";
 import { TaskArea } from "./components/TaskArea";
-import { TaskListMock } from "./mocks/TaskList.mock";
-import { TaskService } from "./services/TaskService";
+import { createTask, getAllTasks, updateTask } from "./services/TaskService";
 import { Task } from "./types/Task";
 
 const App = () => {
-  const [taskList, setList] = useState<Task[]>(TaskListMock);
+  const [taskList, setTaskList] = useState<Task[]>([]);
 
-  const handleAddTask = (taskName: string) => {
-    const newList = [...taskList];
-    const newTask = TaskService.addTask(taskName);
-    newList.push(newTask);
-    setList(newList);
+  async function loadTasks() {
+    const data = await getAllTasks();
+    setTaskList(data);
+  }
+
+  const handleAddTask = async (taskName: string) => {
+    await createTask(taskName);
+    loadTasks();
   };
 
-  const handleToggleTask = (id: string) => {
-    const newList = taskList.map((task) => {
-      if (task.id === id) {
-        return TaskService.toggleTask(task);
-      }
-      return task;
-    });
-
-    setList(newList);
+  const handleToggleTask = async (task: Task) => {
+    await updateTask(task.id, { done: !task.done });
+    loadTasks();
   };
 
-  const handleDeleteTask = (id: string) => {
-    const newList = taskList.map((task) => {
-      if (task.id === id) {
-        return TaskService.deleteTask(task);
-      }
-      return task;
-    });
-
-    setList(newList);
+  const handleDeleteTask = async (task: Task) => {
+    await updateTask(task.id, { deleted: true });
+    loadTasks();
   };
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
   return (
     <Styles.Container>

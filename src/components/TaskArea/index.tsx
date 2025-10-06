@@ -3,19 +3,19 @@ import * as Styles from "./styles";
 
 type TaskItemProps = {
   task: Task;
-  onToggle: (taskId: string) => void;
-  onDelete: (taskId: string) => void;
+  onToggle: (task: Task) => void;
+  onDelete: (task: Task) => void;
 };
 
 export const TaskArea = ({ task, onToggle, onDelete }: TaskItemProps) => {
   const handleToggle = () => {
-    onToggle(task.id);
+    onToggle(task);
   };
-  
+
   const handleDelete = (e: React.MouseEvent) => {
-  e.stopPropagation();
-  onDelete(task.id);
-};
+    e.stopPropagation();
+    onDelete(task);
+  };
 
   return (
     <Styles.Container done={task.done} onClick={handleToggle}>
