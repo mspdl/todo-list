@@ -5,13 +5,13 @@ type ContainerProps = {
 };
 
 export const Container = styled.div<ContainerProps>`
-  display: flex;
-  background-color: ${(props) => (props.done ? "#333" : "#20212c")};
-  padding: 10px;
-  border-radius: 10px;
   align-items: center;
-  margin-bottom: 10px;
+  background-color: ${(props) => (props.done ? "#333" : "#20212c")};
+  border-radius: 10px;
   cursor: pointer;
+  display: flex;
+  margin-bottom: 10px;
+  padding: 10px;
 
   input {
     width: 25px;
@@ -19,19 +19,26 @@ export const Container = styled.div<ContainerProps>`
     margin-right: 5px;
   }
 
+  .edit-input {
+    flex: 1;
+  }
+
   label {
+    flex: 1;
     color: ${(props) => (props.done ? "#777" : "#ccc")};
     text-decoration: ${(props) => (props.done ? "line-through" : "initial")};
   }
 
+  .edit,
   .delete {
-    margin-left: auto;
+    margin-left: 8px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
 
-    &:hover {
-      border-radius: 10px;
-      background-color: #fff;
-      color: #000;
-      padding: 5px;
-    }
+  .edit:hover,
+  .delete:hover {
+    opacity: 1;
   }
 `;

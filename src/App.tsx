@@ -28,6 +28,11 @@ const App = () => {
     loadTasks();
   };
 
+  const handleEditTask = async (task: Task, newTaskName: string) => {
+    await updateTask(task.id, { name: newTaskName });
+    loadTasks();
+  };
+
   useEffect(() => {
     loadTasks();
   }, []);
@@ -48,6 +53,7 @@ const App = () => {
                 task={task}
                 onToggle={handleToggleTask}
                 onDelete={handleDeleteTask}
+                onEdit={handleEditTask}
               />
             </div>
           ))}
