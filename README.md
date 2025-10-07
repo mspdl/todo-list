@@ -2,6 +2,34 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# 🔐 Environment Variables Setup
+
+This project uses **Firebase** for data storage and authentication.  
+To keep sensitive credentials secure, all Firebase configuration values must be stored in a local environment file that is **not committed** to the repository.
+
+Follow the steps below to set it up:
+
+---
+
+## 1. Create a `.env.local` file
+
+In the **root directory** of your project (the same level as `package.json`)
+
+## 2. Add your Firebase credentials
+
+Copy your Firebase configuration values from the Firebase Console and define them as environment variables in the `.env.local` file.
+
+> ⚠️ All variables **must start with `REACT_APP_`** so that Create React App can access them during build time.
+
+```env
+REACT_APP_FIREBASE_API_KEY=your_api_key_here
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain_here
+REACT_APP_FIREBASE_PROJECT_ID=your_project_id_here
+REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket_here
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id_here
+REACT_APP_FIREBASE_APP_ID=your_app_id_here
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
