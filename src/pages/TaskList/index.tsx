@@ -1,3 +1,4 @@
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { AddTaskArea } from "../../components/AddTaskArea";
 import { TaskArea } from "../../components/TaskArea";
@@ -11,13 +12,38 @@ import * as Styles from "./styles";
 
 export const TaskList = () => {
   const [taskList, setTaskList] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  const auth = getAuth();
+
+  // ✅ Carregar tarefas somente após o login
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+        loadTasks();
+      } else {
+        setUserId(null);
+        setTaskList([]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   async function loadTasks() {
-    const data = await getAllTasks();
-    setTaskList(data);
+    setLoading(true);
+    try {
+      const data = await getAllTasks();
+      setTaskList(data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const handleAddTask = async (taskName: string) => {
+    if (!userId) return;
     await createTask(taskName);
     loadTasks();
   };
@@ -37,9 +63,16 @@ export const TaskList = () => {
     loadTasks();
   };
 
-  useEffect(() => {
-    loadTasks();
-  }, []);
+  if (!userId) {
+    return (
+      <Styles.Container>
+        <Styles.Area>
+          <Styles.Header>Todo List</Styles.Header>
+          <p>Por favor, faça login para ver suas tarefas.</p>
+        </Styles.Area>
+      </Styles.Container>
+    );
+  }
 
   return (
     <Styles.Container>
@@ -48,18 +81,18 @@ export const TaskList = () => {
 
         <AddTaskArea onEnter={handleAddTask} />
 
+        {loading && <p>Carregando tarefas...</p>}
+
         {taskList
           .filter((task) => !task.deleted)
           .map((task, index) => (
-            <div key={index}>
-              <TaskArea
-                key={index}
-                task={task}
-                onToggle={handleToggleTask}
-                onDelete={handleDeleteTask}
-                onEdit={handleEditTask}
-              />
-            </div>
+            <TaskArea
+              key={index}
+              task={task}
+              onToggle={handleToggleTask}
+              onDelete={handleDeleteTask}
+              onEdit={handleEditTask}
+            />
           ))}
       </Styles.Area>
     </Styles.Container>
