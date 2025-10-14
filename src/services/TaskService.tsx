@@ -1,3 +1,4 @@
+import { getAuth } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -8,38 +9,41 @@ import {
 import { db } from "../firebase";
 import { Task } from "../types/Task";
 
-const currentDate = new Date().toISOString();
-const collectionName = "tasks";
-const tasksCollection = collection(db, collectionName);
+function getUserId(): string {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) throw new Error("Usuário não autenticado");
+  return user.uid;
+}
 
-export async function createTask(title: string): Promise<Task> {
-  const newTask = {
-    name: title,
+export async function createTask(name: string): Promise<void> {
+  const userId = getUserId();
+  const tasksCollection = collection(db, "users", userId, "tasks");
+
+  await addDoc(tasksCollection, {
+    name,
     done: false,
-    created: currentDate,
     deleted: false,
-  };
-
-  const docRef = await addDoc(tasksCollection, newTask);
-  return {
-    id: docRef.id,
-    name: title,
-    done: newTask.done,
-    created: currentDate,
-    deleted: false,
-  };
+    createdAt: new Date(),
+  });
 }
 
 export async function getAllTasks(): Promise<Task[]> {
+  const userId = getUserId();
+  const tasksCollection = collection(db, "users", userId, "tasks");
   const snapshot = await getDocs(tasksCollection);
-  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Task));
+
+  return snapshot.docs.map((docSnap) => ({
+    id: docSnap.id,
+    ...docSnap.data(),
+  })) as Task[];
 }
 
 export async function updateTask(
-  id: string,
-  updatedData: Partial<Omit<Task, "id">>
+  taskId: string,
+  updates: Partial<Task>
 ): Promise<void> {
-  updatedData = { ...updatedData, updated: currentDate };
-  const taskDoc = doc(db, collectionName, id);
-  await updateDoc(taskDoc, updatedData);
+  const userId = getUserId();
+  const taskRef = doc(db, "users", userId, "tasks", taskId);
+  await updateDoc(taskRef, updates);
 }
