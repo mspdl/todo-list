@@ -17,7 +17,6 @@ export const TaskList = () => {
 
   const auth = getAuth();
 
-  // ✅ Carregar tarefas somente após o login
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {

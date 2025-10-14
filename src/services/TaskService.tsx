@@ -1,19 +1,14 @@
+import { getAuth } from "firebase/auth";
 import {
-  collection,
   addDoc,
+  collection,
+  doc,
   getDocs,
   updateDoc,
-  doc,
-  query,
-  where,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { db } from "../firebase"; // importa a instância do Firestore
+import { db } from "../firebase";
 import { Task } from "../types/Task";
 
-const COLLECTION_NAME = "tasks";
-
-// ✅ Helper para pegar o ID do usuário autenticado
 function getUserId(): string {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -21,12 +16,11 @@ function getUserId(): string {
   return user.uid;
 }
 
-// ✅ Criar tarefa associada ao usuário logado
 export async function createTask(name: string): Promise<void> {
   const userId = getUserId();
+  const tasksCollection = collection(db, "users", userId, "tasks");
 
-  await addDoc(collection(db, COLLECTION_NAME), {
-    userId,
+  await addDoc(tasksCollection, {
     name,
     done: false,
     deleted: false,
@@ -34,12 +28,10 @@ export async function createTask(name: string): Promise<void> {
   });
 }
 
-// ✅ Buscar apenas tarefas do usuário logado
 export async function getAllTasks(): Promise<Task[]> {
   const userId = getUserId();
-
-  const q = query(collection(db, COLLECTION_NAME), where("userId", "==", userId));
-  const snapshot = await getDocs(q);
+  const tasksCollection = collection(db, "users", userId, "tasks");
+  const snapshot = await getDocs(tasksCollection);
 
   return snapshot.docs.map((docSnap) => ({
     id: docSnap.id,
@@ -47,8 +39,11 @@ export async function getAllTasks(): Promise<Task[]> {
   })) as Task[];
 }
 
-// ✅ Atualizar tarefa (nome, done, etc)
-export async function updateTask(taskId: string, updates: Partial<Task>): Promise<void> {
-  const ref = doc(db, COLLECTION_NAME, taskId);
-  await updateDoc(ref, updates);
+export async function updateTask(
+  taskId: string,
+  updates: Partial<Task>
+): Promise<void> {
+  const userId = getUserId();
+  const taskRef = doc(db, "users", userId, "tasks", taskId);
+  await updateDoc(taskRef, updates);
 }
